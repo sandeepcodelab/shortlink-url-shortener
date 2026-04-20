@@ -1,0 +1,27 @@
+{
+  "name": "shortlink",
+  "version": "1.0.0",
+  "description": "ShortLink is a URL shortener that generates compact links for long URLs.",
+  "keywords": [
+    "node.js",
+    "express.js",
+    "mongodb",
+    "API-creation",
+    "backend"
+  ],
+  "license": "ISC",
+  "author": "sandeepcodelab",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.4.1",
+    "nodemon": "^3.1.14"
+  }
+}
