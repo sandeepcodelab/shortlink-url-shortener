@@ -15,10 +15,12 @@ const urlSchema = new Schema(
       type: Number,
       default: 0,
     },
-    userIpAddress: String,
-    user: {
-      type: mongoose.Types.ObjectId,
-      ref: "User",
+    createdBy: {
+      user: {
+        type: mongoose.Types.ObjectId,
+        ref: "User",
+      },
+      guest: String,
     },
     visits: [
       {
@@ -29,6 +31,7 @@ const urlSchema = new Schema(
         },
       },
     ],
+    expiryAt: Date,
   },
   { timestamps: true }
 );
