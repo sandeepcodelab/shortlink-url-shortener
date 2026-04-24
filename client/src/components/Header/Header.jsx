@@ -11,11 +11,14 @@ import {
   ListItem,
   ListItemText,
   useMediaQuery,
+  Link,
+  Container,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 
 export default function Header() {
+  const [active, setActive] = useState("home");
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -47,85 +50,112 @@ export default function Header() {
           backdropFilter: scrolled ? "blur(10px)" : "none",
           boxShadow: scrolled ? "0 4px 20px rgba(0,0,0,0.3)" : "none",
           borderBottom: "1px solid rgba(255,255,255,0.08)",
-
           transition: "all 0.3s ease",
         }}
       >
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          {/* Logo */}
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: "bold",
-              letterSpacing: 1,
-              background: "linear-gradient(45deg, #38bdf8, #6366f1)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              cursor: "pointer",
-            }}
-          >
-            ShortLink
-          </Typography>
-
-          {/* Desktop Menu */}
-          {!isMobile && (
-            <Box
+        <Container maxWidth="xl">
+          <Toolbar sx={{ justifyContent: "space-between" }}>
+            {/* Logo */}
+            <Typography
+              variant="h6"
               sx={{
-                display: "flex",
-                gap: 3,
-                alignItems: "center",
+                fontWeight: "bold",
+                letterSpacing: 1,
+                background: "linear-gradient(45deg, #38bdf8, #6366f1)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                cursor: "pointer",
               }}
             >
-              {navItems.map((item) => (
-                <Button
-                  key={item}
+              ShortLink
+            </Typography>
+
+            {/* Desktop Menu */}
+            {!isMobile && (
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 3,
+                  alignItems: "center",
+                  fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                }}
+              >
+                {navItems.map((item) => (
+                  <Link
+                    href={`#${item.toLowerCase()}`}
+                    underline="none"
+                    onClick={() => setActive(item.toLowerCase())}
+                    sx={{
+                      position: "relative",
+                      color:
+                        active === item.toLowerCase() ? "#38bdf8" : "#cbd5f5",
+                      fontWeight: 500,
+                      fontSize: "0.95rem",
+                      transition: "color 0.3s ease",
+
+                      "&::after": {
+                        content: '""',
+                        position: "absolute",
+                        left: "50%",
+                        bottom: -4,
+                        width: active === item.toLowerCase() ? "100%" : "0%",
+                        height: "2px",
+                        background: "#38bdf8",
+                        transform: "translateX(-50%)",
+                        transition: "width 0.3s ease",
+                      },
+
+                      "&:hover": {
+                        color: "#38bdf8",
+                      },
+
+                      "&:hover::after": {
+                        width: "100%",
+                      },
+                    }}
+                  >
+                    {item}
+                  </Link>
+                ))}
+
+                <Link
+                  underline="none"
                   sx={{
                     color: "#cbd5f5",
                     textTransform: "none",
                     fontWeight: 500,
+                    fontSize: "0.95rem",
+                  }}
+                >
+                  Login
+                </Link>
+
+                <Button
+                  variant="contained"
+                  sx={{
+                    background: "linear-gradient(45deg, #6366f1, #38bdf8)",
+                    borderRadius: "8px",
+                    textTransform: "none",
+                    fontWeight: "bold",
+                    px: 2,
                     "&:hover": {
-                      color: "#38bdf8",
+                      background: "linear-gradient(45deg, #4f46e5, #0ea5e9)",
                     },
                   }}
                 >
-                  {item}
+                  Get Started
                 </Button>
-              ))}
+              </Box>
+            )}
 
-              <Button
-                sx={{
-                  color: "#cbd5f5",
-                  textTransform: "none",
-                }}
-              >
-                Login
-              </Button>
-
-              <Button
-                variant="contained"
-                sx={{
-                  background: "linear-gradient(45deg, #6366f1, #38bdf8)",
-                  borderRadius: "8px",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  px: 2,
-                  "&:hover": {
-                    background: "linear-gradient(45deg, #4f46e5, #0ea5e9)",
-                  },
-                }}
-              >
-                Get Started
-              </Button>
-            </Box>
-          )}
-
-          {/* Mobile Menu Icon */}
-          {isMobile && (
-            <IconButton onClick={toggleDrawer} sx={{ color: "#94a3b8" }}>
-              <MenuIcon />
-            </IconButton>
-          )}
-        </Toolbar>
+            {/* Mobile Menu Icon */}
+            {isMobile && (
+              <IconButton onClick={toggleDrawer} sx={{ color: "#94a3b8" }}>
+                <MenuIcon />
+              </IconButton>
+            )}
+          </Toolbar>
+        </Container>
       </AppBar>
 
       {/* Mobile Drawer */}
