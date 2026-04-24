@@ -27,7 +27,7 @@ export default function Features() {
       sx={{
         px: 2,
         width: "100%",
-        maxWidth: "1100px",
+        maxWidth: "1200px",
         mx: "auto",
         textAlign: "center",
         scrollMarginTop: "80px",
