@@ -32,6 +32,7 @@ export default function Home() {
 
   return (
     <Box
+      id="home"
       sx={{
         minHeight: "90vh",
         display: "flex",
