@@ -1,8 +1,7 @@
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import About from "../components/Home/About";
 import Features from "../components/Home/Features";
 import Home from "../components/Home/Home";
-import Footer from "../components/Footer/Footer";
 
 export default function HomePage() {
   return (
@@ -23,10 +22,11 @@ export default function HomePage() {
           position: "relative",
         }}
       >
-        <Home />
-        <Features />
-        <About />
-        <Footer />
+        <Container maxWidth="xl">
+          <Home />
+          <Features />
+          <About />
+        </Container>
       </Box>
     </>
   );
