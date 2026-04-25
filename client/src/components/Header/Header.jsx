@@ -100,7 +100,7 @@ export default function Header() {
                         bottom: -4,
                         width: active === item.toLowerCase() ? "100%" : "0%",
                         height: "2px",
-                        background: "#38bdf8",
+                        background: "linear-gradient(45deg, #38bdf8, #7d0cee)",
                         transform: "translateX(-50%)",
                         transition: "width 0.3s ease",
                       },
@@ -133,17 +133,16 @@ export default function Header() {
                 <Button
                   variant="contained"
                   sx={{
-                    background: "linear-gradient(45deg, #6366f1, #38bdf8)",
-                    borderRadius: "8px",
+                    background: "linear-gradient(45deg, #098bc4, #7d0cee)",
+                    borderRadius: "50px",
                     textTransform: "none",
-                    fontWeight: "bold",
                     px: 2,
                     "&:hover": {
-                      background: "linear-gradient(45deg, #4f46e5, #0ea5e9)",
+                      background: "linear-gradient(45deg, #0ea5e9, #4f46e5)",
                     },
                   }}
                 >
-                  Get Started
+                  Sign up
                 </Button>
               </Box>
             )}

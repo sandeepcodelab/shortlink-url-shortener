@@ -20,7 +20,7 @@ export default function About() {
         sx={{
           fontWeight: "bold",
           mb: 3,
-          background: "linear-gradient(45deg, #38bdf8, #6366f1)",
+          background: "#38bdf8",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
         }}

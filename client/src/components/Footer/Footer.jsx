@@ -1,9 +1,11 @@
 import React from "react";
-import { Box, Typography, IconButton, Container } from "@mui/material";
+import { Box, Typography, IconButton, Container, Link } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 export default function Footer() {
+  const menus = ["Home", "Features", "About"];
+
   return (
     <Box
       sx={{
@@ -18,7 +20,6 @@ export default function Footer() {
       <Container maxWidth="xl">
         <Box
           sx={{
-            //   maxWidth: "1100px",
             mx: "auto",
             display: "flex",
             flexDirection: { xs: "column", sm: "row" },
@@ -41,30 +42,26 @@ export default function Footer() {
           </Typography>
 
           {/* Links */}
-          <Box sx={{ display: "flex", gap: 3 }}>
-            <Typography
-              component="a"
-              href="#features"
-              sx={{
-                color: "#94a3b8",
-                textDecoration: "none",
-                "&:hover": { color: "#38bdf8" },
-              }}
-            >
-              Features
-            </Typography>
-
-            <Typography
-              component="a"
-              href="#about"
-              sx={{
-                color: "#94a3b8",
-                textDecoration: "none",
-                "&:hover": { color: "#38bdf8" },
-              }}
-            >
-              About
-            </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 3,
+              fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+            }}
+          >
+            {menus.map((item) => (
+              <Link
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                sx={{
+                  color: "#94a3b8",
+                  textDecoration: "none",
+                  "&:hover": { color: "#38bdf8" },
+                }}
+              >
+                {item}
+              </Link>
+            ))}
           </Box>
 
           {/* Social Icons */}

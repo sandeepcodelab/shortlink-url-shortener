@@ -25,6 +25,7 @@ export default function Features() {
     <Box
       id="features"
       sx={{
+        mt: 10,
         px: 2,
         width: "100%",
         maxWidth: "1200px",
@@ -38,7 +39,7 @@ export default function Features() {
         sx={{
           fontWeight: "bold",
           mb: 5,
-          background: "linear-gradient(45deg, #38bdf8, #6366f1)",
+          background: "#38bdf8",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
         }}

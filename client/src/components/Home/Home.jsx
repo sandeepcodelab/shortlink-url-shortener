@@ -49,7 +49,7 @@ export default function Home() {
           fontWeight: "bold",
           textAlign: "center",
           mb: 2,
-          background: "linear-gradient(45deg, #38bdf8, #6366f1)",
+          background: "linear-gradient(45deg, #38bdf8, #7d0cee)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
         }}
@@ -120,10 +120,10 @@ export default function Home() {
             px: 4,
             py: 2,
             fontWeight: "bold",
-            background: "linear-gradient(45deg, #6366f1, #38bdf8)",
-            boxShadow: "0 4px 20px rgba(56,189,248,0.3)",
+            background: "linear-gradient(45deg, #098bc4, #7d0cee)",
+            boxShadow: "0 4px 20px #c34dff47",
             "&:hover": {
-              background: "linear-gradient(45deg, #4f46e5, #0ea5e9)",
+              background: "linear-gradient(45deg, #0ea5e9, #4f46e5)",
               boxShadow: "0 6px 25px rgba(56,189,248,0.5)",
             },
           }}
@@ -151,15 +151,6 @@ export default function Home() {
           <IconButton
             aria-label="Copy"
             onClick={handleCopy}
-            // sx={{
-            //   color: "#fff",
-            //   // border: "1px solid #38bdf8",
-            //   background: "rgba(0,0,0,0.4)",
-            //   width: "40px",
-            //   height: "40px",
-            //   borderRadius: "8px",
-            // }}
-
             sx={{
               width: 42,
               height: 42,
@@ -168,7 +159,6 @@ export default function Home() {
               border: "1px solid rgba(255,255,255,0.1)",
               color: "#fff",
               "&:hover": {
-                // background: "rgba(56,189,248,0.15)",
                 background: "rgba(17,19,20,0.15)",
               },
             }}
