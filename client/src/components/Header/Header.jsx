@@ -82,6 +82,7 @@ export default function Header() {
               >
                 {navItems.map((item) => (
                   <Link
+                    key={item}
                     href={`#${item.toLowerCase()}`}
                     underline="none"
                     onClick={() => setActive(item.toLowerCase())}
