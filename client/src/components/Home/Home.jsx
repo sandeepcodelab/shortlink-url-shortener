@@ -10,24 +10,39 @@ import {
   IconButton,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useToast } from "../../context/ToastProvider";
 
 export default function Home() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
-  const [open, setOpen] = useState(false);
 
+  const { notify } = useToast();
+
+  // Validate url
+  const isValidUrl = (value) => {
+    try {
+      new URL(value);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
+
+  // Submit
   const handleShorten = () => {
     if (!url) return;
 
-    // Fake API response (replace with backend)
-    const fakeShort =
-      "https://short.ly/" + Math.random().toString(36).substring(7);
-    setShortUrl(fakeShort);
+    if (!isValidUrl(url)) {
+      notify.error("Invalid URL");
+      return;
+    }
+
+    setShortUrl(url);
   };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shortUrl);
-    setOpen(true);
+    notify.success("Copied!");
   };
 
   return (
@@ -167,24 +182,6 @@ export default function Home() {
           </IconButton>
         </Paper>
       )}
-
-      {/* Toast */}
-      <Snackbar
-        open={open}
-        autoHideDuration={2000}
-        onClose={() => setOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
-          severity="success"
-          sx={{
-            color: "#fff",
-            background: "#273245",
-          }}
-        >
-          Copied to clipboard!
-        </Alert>
-      </Snackbar>
     </Box>
   );
 }
