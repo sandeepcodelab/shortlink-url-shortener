@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Typography, IconButton, Container, Link } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import FooterLogo from "../../assets/img/footer-logo.png";
 
 export default function Footer() {
   const menus = ["Home", "Features", "About"];
@@ -29,17 +30,13 @@ export default function Footer() {
           }}
         >
           {/* Brand */}
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: "bold",
-              background: "linear-gradient(45deg, #38bdf8, #6366f1)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+          <img
+            src={FooterLogo}
+            alt="ShortLink Logo"
+            style={{
+              height: "100px",
             }}
-          >
-            ShortLink
-          </Typography>
+          />
 
           {/* Links */}
           <Box

@@ -16,6 +16,8 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
+import Logo from "../../assets/img/logo.png";
+import { Link as RouterLink } from "react-router";
 
 export default function Header() {
   const [active, setActive] = useState("home");
@@ -56,20 +58,16 @@ export default function Header() {
         <Container maxWidth="xl">
           <Toolbar sx={{ justifyContent: "space-between" }}>
             {/* Logo */}
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: "bold",
-                letterSpacing: 1,
-                background: "linear-gradient(45deg, #38bdf8, #6366f1)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                cursor: "pointer",
-              }}
-            >
-              ShortLink
-            </Typography>
-
+            <RouterLink to="/">
+              <img
+                src={Logo}
+                alt="ShortLink Logo"
+                style={{
+                  height: "40px",
+                  // cursor: "pointer",
+                }}
+              />
+            </RouterLink>
             {/* Desktop Menu */}
             {!isMobile && (
               <Box
