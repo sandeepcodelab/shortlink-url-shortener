@@ -17,12 +17,15 @@ import {
 import { useTheme } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../../assets/img/logo.png";
-import { Link as RouterLink } from "react-router";
+import { Link as RouterLink, useLocation } from "react-router";
 
 export default function Header() {
-  const [active, setActive] = useState("home");
+  // const [active, setActive] = useState("home");
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const { hash } = useLocation();
+  const location = hash ? hash.replace("#", "") : "home";
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -83,11 +86,11 @@ export default function Header() {
                     key={item}
                     href={`#${item.toLowerCase()}`}
                     underline="none"
-                    onClick={() => setActive(item.toLowerCase())}
+                    // onClick={() => setActive(item.toLowerCase())}
                     sx={{
                       position: "relative",
                       color:
-                        active === item.toLowerCase() ? "#38bdf8" : "#cbd5f5",
+                        location === item.toLowerCase() ? "#38bdf8" : "#cbd5f5",
                       fontWeight: 500,
                       fontSize: "0.95rem",
                       transition: "color 0.3s ease",
@@ -97,7 +100,7 @@ export default function Header() {
                         position: "absolute",
                         left: "50%",
                         bottom: -4,
-                        width: active === item.toLowerCase() ? "100%" : "0%",
+                        width: location === item.toLowerCase() ? "100%" : "0%",
                         height: "2px",
                         background: "linear-gradient(45deg, #38bdf8, #7d0cee)",
                         transform: "translateX(-50%)",
@@ -117,32 +120,44 @@ export default function Header() {
                   </Link>
                 ))}
 
-                <Link
-                  underline="none"
+                <Box
                   sx={{
-                    color: "#cbd5f5",
-                    textTransform: "none",
-                    fontWeight: 500,
-                    fontSize: "0.95rem",
+                    display: "flex",
+                    gap: 1,
                   }}
                 >
-                  Login
-                </Link>
+                  <RouterLink to="/login">
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        color: "#cbd5f5",
+                        borderRadius: "50px",
+                        textTransform: "none",
+                        px: 2,
+                      }}
+                    >
+                      Login
+                    </Button>
+                  </RouterLink>
 
-                <Button
-                  variant="contained"
-                  sx={{
-                    background: "linear-gradient(45deg, #098bc4, #7d0cee)",
-                    borderRadius: "50px",
-                    textTransform: "none",
-                    px: 2,
-                    "&:hover": {
-                      background: "linear-gradient(45deg, #0ea5e9, #4f46e5)",
-                    },
-                  }}
-                >
-                  Sign up
-                </Button>
+                  <RouterLink to="/signup">
+                    <Button
+                      variant="contained"
+                      sx={{
+                        background: "linear-gradient(45deg, #098bc4, #7d0cee)",
+                        borderRadius: "50px",
+                        textTransform: "none",
+                        px: 2,
+                        "&:hover": {
+                          background:
+                            "linear-gradient(45deg, #0ea5e9, #4f46e5)",
+                        },
+                      }}
+                    >
+                      Sign up
+                    </Button>
+                  </RouterLink>
+                </Box>
               </Box>
             )}
 
@@ -173,34 +188,83 @@ export default function Header() {
           },
         }}
       >
-        <List>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 3,
+            fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+            mt: 4,
+            fontWeight: 500,
+          }}
+        >
           {navItems.map((item) => (
-            <ListItem
-              button
-              key={item}
-              onClick={toggleDrawer}
-              sx={{ textAlign: "center" }}
-            >
-              <ListItemText primary={item} />
-            </ListItem>
-          ))}
-
-          <ListItem button sx={{ textAlign: "center" }}>
-            <ListItemText primary="Login" />
-          </ListItem>
-
-          <ListItem>
-            <Button
-              fullWidth
-              variant="contained"
+            <Link
+              href={`#${item.toLowerCase()}`}
+              underline="none"
               sx={{
-                background: "linear-gradient(45deg, #6366f1, #38bdf8)",
+                color: location === item.toLowerCase() ? "#38bdf8" : "#cbd5f5",
+                fontWeight: 500,
+                transition: "color 0.3s ease",
+
+                "&:hover": {
+                  color: "#38bdf8",
+                },
+
+                "&:hover::after": {
+                  width: "100%",
+                },
               }}
             >
-              Get Started
-            </Button>
-          </ListItem>
-        </List>
+              {item}
+            </Link>
+          ))}
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+              width: "100%",
+              px: 4,
+            }}
+          >
+            <RouterLink to="/login">
+              <Button
+                fullWidth
+                variant="outlined"
+                sx={{
+                  color: "#cbd5f5",
+                  borderRadius: "50px",
+                  textTransform: "none",
+                  px: 2,
+                }}
+              >
+                Login
+              </Button>
+            </RouterLink>
+
+            <RouterLink to="/login">
+              <Button
+                fullWidth
+                variant="contained"
+                sx={{
+                  background: "linear-gradient(45deg, #098bc4, #7d0cee)",
+                  borderRadius: "50px",
+                  textTransform: "none",
+                  px: 2,
+                  "&:hover": {
+                    background: "linear-gradient(45deg, #0ea5e9, #4f46e5)",
+                  },
+                }}
+              >
+                Sign up
+              </Button>
+            </RouterLink>
+          </Box>
+        </Box>
       </Drawer>
     </>
   );
