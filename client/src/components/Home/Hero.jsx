@@ -8,10 +8,12 @@ import {
   Snackbar,
   Alert,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useToast } from "../../context/ToastProvider";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
+import { createShortUrl } from "../../services/shorten";
 
 export default function Hero() {
   const [url, setUrl] = useState("");
@@ -34,17 +36,10 @@ export default function Hero() {
     try {
       setLoading(true);
 
-      const response = await fetch("http://localhost:3000/api/shorten", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          originalUrl: url,
-        }),
-      });
+      const res = await createShortUrl(url);
+      setShortUrl(res?.data?.url);
 
-      const res = await response.json();
-
-      setShortUrl(res.url);
+      setCopy(false);
     } catch (err) {
       console.log(err);
     } finally {
@@ -56,6 +51,7 @@ export default function Hero() {
     navigator.clipboard.writeText(shortUrl);
     setCopy(true);
     notify.success("Copied!");
+    setUrl("");
   };
 
   return (
@@ -66,7 +62,7 @@ export default function Hero() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        pt: 12,
         px: 2,
       }}
     >
@@ -99,7 +95,8 @@ export default function Hero() {
       {/* Input Box */}
       <Box
         sx={{
-          p: 5,
+          px: { xs: 0, sm: 4 },
+          py: { xs: 2, sm: 4 },
           width: "100%",
           maxWidth: { xs: "100%", sm: "700px" },
           display: "flex",
@@ -113,7 +110,9 @@ export default function Hero() {
           placeholder="Paste your long URL..."
           variant="outlined"
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          onChange={(e) => {
+            (setUrl(e.target.value), setShortUrl(false));
+          }}
           sx={{
             "& .MuiOutlinedInput-root": {
               borderRadius: "50px",
@@ -143,10 +142,11 @@ export default function Hero() {
           variant="contained"
           onClick={handleShorten}
           sx={{
-            width: { xs: "100%", sm: "auto" },
+            width: { xs: "100%", sm: "200px" },
             borderRadius: "50px",
             px: 4,
             py: 2,
+            gap: "5px",
             fontWeight: "bold",
             background: "linear-gradient(45deg, #098bc4, #7d0cee)",
             boxShadow: "0 4px 20px #c34dff47",
@@ -154,8 +154,13 @@ export default function Hero() {
               background: "linear-gradient(45deg, #0ea5e9, #4f46e5)",
               boxShadow: "0 6px 25px rgba(56,189,248,0.5)",
             },
+            "&.Mui-disabled": {
+              color: "#b6b6b6",
+            },
           }}
+          disabled={loading}
         >
+          {loading ? <CircularProgress size={18} color="#b6b6b6" /> : ""}
           Shorten
         </Button>
       </Box>
@@ -174,16 +179,20 @@ export default function Hero() {
             background: "rgba(255,255,255,0.05)",
           }}
         >
-          <Typography sx={{ color: "#38bdf8" }}>{shortUrl}</Typography>
+          <Typography
+            sx={{ color: "#38bdf8", fontSize: { xs: "small", sm: "medium" } }}
+          >
+            {shortUrl}
+          </Typography>
 
           <IconButton
             aria-label="Copy"
             onClick={handleCopy}
             disabled={copy}
             sx={{
-              width: 42,
-              height: 42,
-              borderRadius: "10px",
+              width: { xs: 28, sm: 42 },
+              height: { xs: 28, sm: 42 },
+              borderRadius: { xs: "6px", sm: "10px" },
               background: "rgba(255,255,255,0.05)",
               border: "1px solid rgba(255,255,255,0.1)",
               color: "#fff",
@@ -196,7 +205,11 @@ export default function Hero() {
               },
             }}
           >
-            {copy ? <DoneOutlinedIcon /> : <ContentCopyIcon />}
+            {copy ? (
+              <DoneOutlinedIcon sx={{ fontSize: { xs: 18, sm: 25 } }} />
+            ) : (
+              <ContentCopyIcon sx={{ fontSize: { xs: 18, sm: 25 } }} />
+            )}
           </IconButton>
         </Paper>
       )}
