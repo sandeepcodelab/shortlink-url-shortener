@@ -1,33 +1,63 @@
 import { Url } from "../models/url.models.js";
+import { nanoid } from "nanoid";
+import { AsyncHandler } from "../utils/AsyncHandler.js";
+import { ApiError } from "../utils/apiError.js";
+import { ApiResponse } from "../utils/apiResponse.js";
 
-const createShortUrl = async (req, res) => {
-  try {
-    const { originalUrl = "" } = req.body;
+const createShortUrl = AsyncHandler(async (req, res) => {
+  const { originalUrl = "" } = req.body;
+  // let guest = req.cookies?.guest || nanoid(20);
+  const guest = req.guest;
 
-    if (!originalUrl) {
-      return res
-        .status(400)
-        .json({ success: false, message: "URL is required" });
-    }
-
-    const shortCode = Math.random().toString(36).substring(2, 8);
-
-    const newUrl = await Url.create({
-      shortCode,
-      originalUrl,
-    });
-
-    const shortUrl = `${req.protocol}://${req.get("host")}/${shortCode}`;
-
-    return res.status(201).json({
-      success: true,
-      message: "Url created successfully.",
-      url: shortUrl,
-    });
-  } catch (err) {
-    return res.status(500).json({ success: false, message: "Server error" });
+  if (!originalUrl) {
+    throw new ApiError(400, "URL is required", []);
   }
-};
+
+  // check limits
+  if (guest) {
+    const guestUrlCount = await Url.countDocuments({
+      "createdBy.guest": guest,
+    });
+
+    if (guestUrlCount >= 3) {
+      throw new ApiError(429, "Guest limit reached. Please login to continue.");
+    }
+  }
+
+  let shortCode;
+
+  while (true) {
+    shortCode = nanoid(7);
+
+    const exists = await Url.findOne({ shortCode });
+    if (!exists) break;
+  }
+
+  const newUrl = await Url.create({
+    shortCode,
+    originalUrl,
+    createdBy: {
+      guest,
+    },
+  });
+
+  const shortUrl = `${process.env.BASE_URL}/${shortCode}`;
+
+  // const option = {
+  //   HttpOnly: true,
+  //   Secure: process.env.NODE_ENV === "production",
+  //   SameSite: "Lax",
+  // };
+
+  return (
+    res
+      .status(201)
+      // .cookie("guest", guest, option)
+      .json(
+        new ApiResponse(201, { url: shortUrl }, "Url created successfully.")
+      )
+  );
+});
 
 const getOriginalUrl = async (req, res) => {
   try {
