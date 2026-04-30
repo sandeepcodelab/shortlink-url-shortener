@@ -23,7 +23,9 @@ export default function Hero() {
   const [copy, setCopy] = useState(false);
 
   // Submit
-  const handleShorten = async () => {
+  const handleShorten = async (e) => {
+    e.preventDefault();
+
     if (!url) return;
 
     const isValidUrl = /^https?:\/\/.+\..+/.test(url);
@@ -37,11 +39,11 @@ export default function Hero() {
       setLoading(true);
 
       const res = await createShortUrl(url);
-      setShortUrl(res?.data?.url);
+      setShortUrl(res?.data?.data?.url);
 
       setCopy(false);
     } catch (err) {
-      console.log(err);
+      notify.error(err?.response?.data?.response?.message);
     } finally {
       setLoading(false);
     }
