@@ -43,7 +43,7 @@ const createShortUrl = AsyncHandler(async (req, res) => {
 
   const shortUrl = `${process.env.BASE_URL}/${shortCode}`;
 
-  // const option = {
+  // const options = {
   //   HttpOnly: true,
   //   Secure: process.env.NODE_ENV === "production",
   //   SameSite: "Lax",
@@ -52,7 +52,7 @@ const createShortUrl = AsyncHandler(async (req, res) => {
   return (
     res
       .status(201)
-      // .cookie("guest", guest, option)
+      // .cookie("guest", guest, options)
       .json(
         new ApiResponse(201, { url: shortUrl }, "Url created successfully.")
       )
@@ -76,6 +76,8 @@ const getOriginalUrl = async (req, res) => {
     }
 
     url.clicks += 1;
+    url.visits.push({ ipAddress: req.ip });
+
     await url.save({ validateBeforeSave: false });
 
     return res.redirect(url.originalUrl);
