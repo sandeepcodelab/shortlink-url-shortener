@@ -6,10 +6,12 @@ const urlSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+      trim: true,
     },
     originalUrl: {
       type: String,
       required: true,
+      trim: true,
     },
     clicks: {
       type: Number,
