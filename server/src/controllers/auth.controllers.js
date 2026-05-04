@@ -1,11 +1,12 @@
 import { User } from "../models/user.models.js";
 import { ApiError } from "../utils/ApiError.js";
-import { ApiResponse } from "../utils/apiResponse";
+import { ApiResponse } from "../utils/ApiResponse.js";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
 
 const generateTokens = async (userID) => {
   try {
     const user = await User.findById(userID);
+
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
 
@@ -71,12 +72,14 @@ const login = AsyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) throw new ApiError(404, "Invalid email or password");
 
-  const isPasswordCorrect = await user.isPasswordCorrect(user.password);
+  const isPasswordCorrect = await user.isPasswordCorrect(password);
 
   if (!isPasswordCorrect)
     throw new ApiError(400, "Please check your email and password");
 
-  const loggedinUser = await User.findById().select("-password -refreshToken");
+  const loggedinUser = await User.findById(user._id).select(
+    "-password -refreshToken"
+  );
 
   if (!loggedinUser)
     throw new ApiError(
@@ -101,5 +104,9 @@ const login = AsyncHandler(async (req, res) => {
     .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
-    .json(new ApiResponse(200, "Logged in successfully"));
+    .json(
+      new ApiResponse(200, { user: loggedinUser }, "Logged in successfully")
+    );
 });
+
+export { register, login };
