@@ -19,8 +19,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../../assets/img/logo.png";
 import { Link as RouterLink, useLocation } from "react-router";
 
-export default function Header() {
-  // const [active, setActive] = useState("home");
+export default function Header({ openModal }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -86,7 +85,6 @@ export default function Header() {
                     key={item}
                     href={`#${item.toLowerCase()}`}
                     underline="none"
-                    // onClick={() => setActive(item.toLowerCase())}
                     sx={{
                       position: "relative",
                       color:
@@ -126,37 +124,34 @@ export default function Header() {
                     gap: 1,
                   }}
                 >
-                  <RouterLink to="/login">
-                    <Button
-                      variant="outlined"
-                      sx={{
-                        color: "#cbd5f5",
-                        borderRadius: "50px",
-                        textTransform: "none",
-                        px: 2,
-                      }}
-                    >
-                      Login
-                    </Button>
-                  </RouterLink>
+                  <Button
+                    variant="outlined"
+                    onClick={() => openModal("login")}
+                    sx={{
+                      color: "#cbd5f5",
+                      borderRadius: "50px",
+                      textTransform: "none",
+                      px: 2,
+                    }}
+                  >
+                    Login
+                  </Button>
 
-                  <RouterLink to="/signup">
-                    <Button
-                      variant="contained"
-                      sx={{
-                        background: "linear-gradient(45deg, #098bc4, #7d0cee)",
-                        borderRadius: "50px",
-                        textTransform: "none",
-                        px: 2,
-                        "&:hover": {
-                          background:
-                            "linear-gradient(45deg, #0ea5e9, #4f46e5)",
-                        },
-                      }}
-                    >
-                      Sign up
-                    </Button>
-                  </RouterLink>
+                  <Button
+                    variant="contained"
+                    onClick={() => openModal("signup")}
+                    sx={{
+                      background: "linear-gradient(45deg, #098bc4, #7d0cee)",
+                      borderRadius: "50px",
+                      textTransform: "none",
+                      px: 2,
+                      "&:hover": {
+                        background: "linear-gradient(45deg, #0ea5e9, #4f46e5)",
+                      },
+                    }}
+                  >
+                    Sign up
+                  </Button>
                 </Box>
               </Box>
             )}
@@ -202,6 +197,7 @@ export default function Header() {
         >
           {navItems.map((item) => (
             <Link
+              key={item}
               href={`#${item.toLowerCase()}`}
               underline="none"
               sx={{
@@ -231,38 +227,36 @@ export default function Header() {
               px: 4,
             }}
           >
-            <RouterLink to="/login">
-              <Button
-                fullWidth
-                variant="outlined"
-                sx={{
-                  color: "#cbd5f5",
-                  borderRadius: "50px",
-                  textTransform: "none",
-                  px: 2,
-                }}
-              >
-                Login
-              </Button>
-            </RouterLink>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => openModal("login")}
+              sx={{
+                color: "#cbd5f5",
+                borderRadius: "50px",
+                textTransform: "none",
+                px: 2,
+              }}
+            >
+              Login
+            </Button>
 
-            <RouterLink to="/login">
-              <Button
-                fullWidth
-                variant="contained"
-                sx={{
-                  background: "linear-gradient(45deg, #098bc4, #7d0cee)",
-                  borderRadius: "50px",
-                  textTransform: "none",
-                  px: 2,
-                  "&:hover": {
-                    background: "linear-gradient(45deg, #0ea5e9, #4f46e5)",
-                  },
-                }}
-              >
-                Sign up
-              </Button>
-            </RouterLink>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={() => openModal("signup")}
+              sx={{
+                background: "linear-gradient(45deg, #098bc4, #7d0cee)",
+                borderRadius: "50px",
+                textTransform: "none",
+                px: 2,
+                "&:hover": {
+                  background: "linear-gradient(45deg, #0ea5e9, #4f46e5)",
+                },
+              }}
+            >
+              Sign up
+            </Button>
           </Box>
         </Box>
       </Drawer>
