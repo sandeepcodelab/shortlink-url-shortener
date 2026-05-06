@@ -13,28 +13,39 @@ import {
 import { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { style } from "./style";
-import { useForm } from "react-hook-form";
-import { login } from "../../services/authService";
+import { formStyle } from "./Style";
+import { useForm, Controller } from "react-hook-form";
+import { loginUser } from "../../services/authService";
+import { useToast } from "../../context/ToastProvider";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const {
+    control,
     register,
     handleSubmit,
-    watch,
+    reset,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
   const [apiError, setApiError] = useState("");
+  const { notify } = useToast();
 
   // Submit handler
   const formSubmit = async (formData) => {
     const { email, password } = formData;
 
     try {
-      const formRes = await login({ email, password });
+      const formRes = await loginUser({ email, password });
       console.log(formRes);
+      notify.success(formRes.data.message);
+      reset({ email: "", password: "" });
+      setApiError("");
     } catch (err) {
       setApiError(err.response.data.response.message);
     }
@@ -64,70 +75,86 @@ export default function Login() {
         </Typography>
       )}
 
-      <TextField
-        id="outlined-basic"
-        label="Email"
-        variant="outlined"
-        fullWidth
-        sx={style}
-        {...register("email", {
+      {/* EMAIL */}
+      <Controller
+        name="email"
+        control={control}
+        rules={{
           required: "Email is required",
           pattern: {
             value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             message: "Enter a valid email",
           },
-        })}
-        error={!!errors.email}
-        helperText={errors.email?.message}
+        }}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            label="Email"
+            variant="outlined"
+            fullWidth
+            sx={formStyle}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+          />
+        )}
       />
 
-      <FormControl
-        variant="outlined"
-        fullWidth
-        sx={style}
-        error={!!errors.password}
-      >
-        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-        <OutlinedInput
-          id="outlined-adornment-password"
-          {...register("password", {
-            required: "Password is required",
-            minLength: {
-              value: 8,
-              message: "Password must be at least 8 characters long",
-            },
-          })}
-          type={showPassword ? "text" : "password"}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label={
-                  showPassword ? "hide the password" : "display the password"
-                }
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                onMouseUp={handleMouseUpPassword}
-                edge="end"
-              >
-                {showPassword ? (
-                  <VisibilityOff sx={{ color: "#fff" }} />
-                ) : (
-                  <Visibility sx={{ color: "#fff" }} />
-                )}
-              </IconButton>
-            </InputAdornment>
-          }
-          label="Password"
-        />
-        <FormHelperText>{errors.password?.message}</FormHelperText>
-      </FormControl>
+      {/* PASSWORD */}
+      <Controller
+        name="password"
+        control={control}
+        rules={{
+          required: "Password is required",
+          minLength: {
+            value: 8,
+            message: "Password must be at least 8 characters long",
+          },
+        }}
+        render={({ field }) => (
+          <FormControl
+            variant="outlined"
+            fullWidth
+            sx={formStyle}
+            error={!!errors.password}
+          >
+            <InputLabel>Password</InputLabel>
+
+            <OutlinedInput
+              {...field}
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? (
+                      <VisibilityOff sx={{ color: "#fff" }} />
+                    ) : (
+                      <Visibility sx={{ color: "#fff" }} />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+            />
+
+            <FormHelperText>{errors.password?.message}</FormHelperText>
+          </FormControl>
+        )}
+      />
 
       <Button
         variant="contained"
-        fullWidth
         type="submit"
+        fullWidth
         disabled={isSubmitting}
-        sx={{ mt: 3, mb: 1 }}
+        sx={{
+          mt: 3,
+          mb: 1,
+          "&.Mui-disabled": {
+            color: "rgba(255, 255, 255, 0.5)",
+            boxShadow: "none",
+            backgroundColor: "rgba(25, 118, 210, 0.5)",
+          },
+        }}
       >
         {isSubmitting ? "Logging in..." : "Login"}
       </Button>
