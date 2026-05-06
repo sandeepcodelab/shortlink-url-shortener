@@ -21,10 +21,11 @@ const generateTokens = async (userID) => {
 };
 
 const register = AsyncHandler(async (req, res) => {
-  const { fullname = "", email = "", password = "" } = req.body.formData;
+  const { fullname = "", email = "", password = "" } = req.body;
 
   if (!fullname) throw new ApiError(400, "Fullname is required", []);
   if (!email) throw new ApiError(400, "Email is required", []);
+  if (!password) throw new ApiError(400, "Password is required", []);
   if (!password) throw new ApiError(400, "Password is required", []);
 
   const isUserExists = await User.findOne({ email });
@@ -64,7 +65,7 @@ const register = AsyncHandler(async (req, res) => {
 });
 
 const login = AsyncHandler(async (req, res) => {
-  const { email = "", password = "" } = req.body.formData;
+  const { email = "", password = "" } = req.body;
 
   if (!email) throw new ApiError(400, "Email is required");
   if (!password) throw new ApiError(400, "Password is required");
