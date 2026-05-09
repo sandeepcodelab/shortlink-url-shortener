@@ -17,6 +17,9 @@ import { formStyle } from "./Style";
 import { useForm, Controller } from "react-hook-form";
 import { loginUser } from "../../services/authService";
 import { useToast } from "../../context/ToastProvider";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router";
+import { useModal } from "../../context/ModalContext";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -34,18 +37,27 @@ export default function Login() {
     },
   });
   const [apiError, setApiError] = useState("");
+  const { setUser } = useAuth();
+  const { closeModal } = useModal();
   const { notify } = useToast();
+  const navigate = useNavigate();
 
   // Submit handler
   const formSubmit = async (formData) => {
     const { email, password } = formData;
 
+    if (!email || !password) return;
+
     try {
-      const formRes = await loginUser({ email, password });
-      console.log(formRes);
-      notify.success(formRes.data.message);
+      const loginRes = await loginUser({ email, password });
+      setUser(loginRes.data.data.user);
+
       reset({ email: "", password: "" });
       setApiError("");
+      closeModal();
+
+      notify.success(loginRes.data.message);
+      navigate("/dashboard");
     } catch (err) {
       setApiError(err.response.data.response.message);
     }

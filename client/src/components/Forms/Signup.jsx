@@ -16,6 +16,9 @@ import { formStyle } from "./style";
 import { useForm, Controller } from "react-hook-form";
 import { registerUser } from "../../services/authService";
 import { useToast } from "../../context/ToastProvider";
+import { useAuth } from "../../context/AuthContext";
+import { useModal } from "../../context/ModalContext";
+import { useNavigate } from "react-router";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -36,17 +39,25 @@ export default function Signup() {
     },
   });
   const [apiError, setApiError] = useState("");
+  const { setUser } = useAuth();
+  const { closeModal } = useModal();
   const { notify } = useToast();
+  const navigate = useNavigate();
 
   // submit handling
   const formSubmit = async (formData) => {
     if (Object.keys(formData).length < 1) return;
 
     try {
-      const formRes = await registerUser(formData);
-      notify.success(formRes.data.message);
-      reset();
+      const signupRes = await registerUser(formData);
+      setUser(signupRes.data.data.user);
+
+      reset({ fullname: "", email: "", password: "", confirmPassword: "" });
       setApiError("");
+      closeModal();
+
+      notify.success(signupRes.data.message);
+      navigate("/dashboard");
     } catch (err) {
       setApiError(err.response.data.response.message);
     }
