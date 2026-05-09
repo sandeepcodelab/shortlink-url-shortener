@@ -6,6 +6,7 @@ import { useState } from "react";
 import Signup from "../Forms/Signup";
 import Login from "../Forms/Login";
 import { useEffect } from "react";
+import { useModal } from "../../context/ModalContext";
 
 const style = {
   position: "absolute",
@@ -34,19 +35,14 @@ const style = {
   color: "#fff",
 };
 
-export default function AuthModal({
-  open,
-  handleClose,
-  formType,
-  setFormType,
-}) {
-  //   const [type, setType] = useState("");
+export default function AuthModal() {
+  const { open, formType, closeModal, setFormType } = useModal();
 
   return (
     <>
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={closeModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
