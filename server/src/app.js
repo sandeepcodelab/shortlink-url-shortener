@@ -1,5 +1,4 @@
 import express from "express";
-import urlRouter from "./routes/url.routes.js";
 import { getOriginalUrl } from "./controllers/url.controllers.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -19,9 +18,13 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Route config
+// import routes
+import urlRouter from "./routes/url.routes.js";
 app.use("/api", urlRouter);
 app.get("/:shortCode", getOriginalUrl);
+
+import authRouter from "./routes/auth.routes.js";
+app.use("/api/auth", authRouter);
 
 // Gloable error handler
 app.use(globleErrorHandler);
