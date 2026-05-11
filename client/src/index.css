@@ -11,3 +11,43 @@ body {
 body {
   background-color: #020617;
 }
+
+/* Navrbar css */
+
+.nav-link {
+  position: relative;
+  text-decoration: none;
+  color: #cbd5f5;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  /* background: #7d0cee; */
+  background: linear-gradient(45deg, #38bdf8, #7d0cee);
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #38bdf8;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link.active {
+  color: #38bdf8;
+}
+
+.nav-link.active::after {
+  width: 100%;
+}
