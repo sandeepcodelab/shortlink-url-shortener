@@ -7,6 +7,7 @@ import { ToastProvider } from "./context/ToastProvider";
 import Analytics from "./pages/Analytics";
 import { AuthProvider } from "./context/AuthContext";
 import { ModalProvider } from "./context/ModalContext";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 export default function App() {
   return (
@@ -19,7 +20,13 @@ export default function App() {
                 <Route path="/" element={<HomePage />} />
               </Route>
 
-              <Route element={<DashboardLayout />}>
+              <Route
+                element={
+                  <ProtectedRoute>
+                    <DashboardLayout />
+                  </ProtectedRoute>
+                }
+              >
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/mylinks" element={<Analytics />} />
               </Route>
