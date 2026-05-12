@@ -17,11 +17,15 @@ import {
 import { useTheme } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../../assets/img/logo.png";
-import { Link as RouterLink, useLocation } from "react-router";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
+import { logout, refreshToken } from "../../services/authService";
+import { useToast } from "../../context/ToastProvider";
 
-export default function UserNavbar({ openModal }) {
-  const { user, isAuthenticated } = useAuth();
+export default function UserNavbar() {
+  const { user, setUser, isAuthenticated } = useAuth();
+  const { notify } = useToast();
+  const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -47,6 +51,31 @@ export default function UserNavbar({ openModal }) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Logout user
+  const logoutUser = async () => {
+    try {
+      const res = await logout();
+      setUser(null);
+      navigate("/");
+      notify.success(res.data.message);
+    } catch (err) {
+      if (err.status === 401) {
+        try {
+          await refreshToken();
+
+          const res = await logout();
+          setUser(null);
+          navigate("/");
+          notify.success(res.data.message);
+        } catch (error) {
+          notify.error(error.message);
+        }
+      }
+
+      notify.error(err.message);
+    }
+  };
 
   return (
     <>
@@ -107,7 +136,7 @@ export default function UserNavbar({ openModal }) {
                   <Typography component="body2">{user.fullname}</Typography>
                   <Button
                     variant="outlined"
-                    onClick={() => openModal("login")}
+                    onClick={() => logoutUser()}
                     sx={{
                       color: "#cbd5f5",
                       borderRadius: "50px",
@@ -182,7 +211,7 @@ export default function UserNavbar({ openModal }) {
             <Button
               fullWidth
               variant="outlined"
-              onClick={() => openModal("login")}
+              onClick={() => logoutUser()}
               sx={{
                 color: "#cbd5f5",
                 borderRadius: "50px",
