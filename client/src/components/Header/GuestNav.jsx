@@ -89,34 +89,8 @@ export default function GuestNavbar() {
                     key={item}
                     href={`#${item.toLowerCase()}`}
                     underline="none"
-                    sx={{
-                      position: "relative",
-                      color:
-                        location === item.toLowerCase() ? "#38bdf8" : "#cbd5f5",
-                      fontWeight: 500,
-                      fontSize: "0.95rem",
-                      transition: "color 0.3s ease",
-
-                      "&::after": {
-                        content: '""',
-                        position: "absolute",
-                        left: "50%",
-                        bottom: -4,
-                        width: location === item.toLowerCase() ? "100%" : "0%",
-                        height: "2px",
-                        background: "linear-gradient(45deg, #38bdf8, #7d0cee)",
-                        transform: "translateX(-50%)",
-                        transition: "width 0.3s ease",
-                      },
-
-                      "&:hover": {
-                        color: "#38bdf8",
-                      },
-
-                      "&:hover::after": {
-                        width: "100%",
-                      },
-                    }}
+                    className={`nav-link ${location === item.toLowerCase() ? "active" : ""}`}
+                    color="#cbd5f5"
                   >
                     {item}
                   </Link>
@@ -204,19 +178,8 @@ export default function GuestNavbar() {
               key={item}
               href={`#${item.toLowerCase()}`}
               underline="none"
-              sx={{
-                color: location === item.toLowerCase() ? "#38bdf8" : "#cbd5f5",
-                fontWeight: 500,
-                transition: "color 0.3s ease",
-
-                "&:hover": {
-                  color: "#38bdf8",
-                },
-
-                "&:hover::after": {
-                  width: "100%",
-                },
-              }}
+              className={`nav-link ${location === item.toLowerCase() ? "active" : ""}`}
+              color="#cbd5f5"
             >
               {item}
             </Link>
