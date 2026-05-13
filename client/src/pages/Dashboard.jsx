@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Box, Container } from "@mui/material";
-import Hero from "../components/Home/Hero";
 import Stats from "../components/Dashboard/Stats";
 import LinksTable from "../components/Dashboard/LinksTable";
 
@@ -51,10 +50,9 @@ export default function DashboardPage() {
           position: "relative",
         }}
       >
-        <Container maxWidth="xl">
-          <Hero />
-          {/* <Stats links={links} /> */}
-          {/* <LinksTable links={links} setLinks={setLinks} /> */}
+        <Container maxWidth="xl" sx={{ mt: 8 }}>
+          <Stats links={links} />
+          <LinksTable links={links} setLinks={setLinks} sx={{ mt: 6 }} />
         </Container>
       </Box>
     </>
