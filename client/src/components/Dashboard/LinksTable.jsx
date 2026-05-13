@@ -83,7 +83,40 @@ export default function LinksTable() {
         borderRadius: 3,
       }}
     >
-      <TableContainer sx={{ maxHeight: 440 }}>
+      {/* <TableContainer sx={{ maxHeight: 440 }}> */}
+      <TableContainer
+        sx={{
+          maxHeight: 440,
+          overflowY: "auto",
+
+          // Scrollbar width
+          "&::-webkit-scrollbar": {
+            width: "8px",
+            height: "8px",
+          },
+
+          // Scrollbar track
+          "&::-webkit-scrollbar-track": {
+            background: "#0f172a",
+            borderRadius: "10px",
+          },
+
+          // Scrollbar thumb
+          "&::-webkit-scrollbar-thumb": {
+            background: "#475569",
+            borderRadius: "10px",
+          },
+
+          // Hover effect
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#64748b",
+          },
+
+          // Firefox
+          scrollbarWidth: "thin",
+          scrollbarColor: "#475569 #0f172a",
+        }}
+      >
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -145,7 +178,6 @@ export default function LinksTable() {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
         sx={{
-          // bgcolor: "#1e293b",
           bgcolor: "#19263b",
           color: "#fff",
 
@@ -165,7 +197,7 @@ export default function LinksTable() {
             color: "#fff",
           },
 
-          // ✅ REAL FIX
+          // Disabled arrow
           "& .Mui-disabled": {
             opacity: 0.3,
             color: "#fff !important",
