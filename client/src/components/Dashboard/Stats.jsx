@@ -41,7 +41,7 @@ export default function Stats({ links = [] }) {
   };
 
   return (
-    <Grid container spacing={3} sx={{ mt: 2, mx: 3 }}>
+    <Grid container spacing={3} sx={{ mt: 2 }}>
       <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <Card sx={cardStyle}>
           <CardContent
