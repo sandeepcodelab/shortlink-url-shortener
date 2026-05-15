@@ -1,4 +1,5 @@
 import { User } from "../models/user.models.js";
+import { mergeGuestLinks } from "../services/mergeGuestLinks.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
@@ -30,6 +31,7 @@ const generateTokens = async (userID) => {
 
 const register = AsyncHandler(async (req, res) => {
   const { fullname = "", email = "", password = "" } = req.body;
+  const guest = req?.cookies?.guest;
 
   if (!fullname) throw new ApiError(400, "Fullname is required", []);
   if (!email) throw new ApiError(400, "Email is required", []);
@@ -52,8 +54,8 @@ const register = AsyncHandler(async (req, res) => {
 
   if (!user) throw new ApiError(500, "User registration failed", []);
 
-  // Set user for currect request
-  req.user = user;
+  // Guest Links merging
+  const mergeResult = await mergeGuestLinks(guest, user._id);
 
   // Get tokens
   const { accessToken, refreshToken } = await generateTokens(user._id);
@@ -62,11 +64,18 @@ const register = AsyncHandler(async (req, res) => {
     .status(201)
     .cookie("accessToken", accessToken, cookieOptions)
     .cookie("refreshToken", refreshToken, cookieOptions)
-    .json(new ApiResponse(201, { user }, "User registered successfully"));
+    .json(
+      new ApiResponse(
+        201,
+        { user, merged: mergeResult?.modifiedCount || 0 },
+        "User registered successfully"
+      )
+    );
 });
 
 const login = AsyncHandler(async (req, res) => {
   const { email = "", password = "" } = req.body;
+  const guest = req?.cookies?.guest;
 
   if (!email) throw new ApiError(400, "Email is required");
   if (!password) throw new ApiError(400, "Password is required");
@@ -89,8 +98,8 @@ const login = AsyncHandler(async (req, res) => {
       "User login failed, Something went wrong during login"
     );
 
-  // Set user for currect request
-  req.user = loggedinUser;
+  // Guest Links merging
+  const mergeResult = await mergeGuestLinks(guest, loggedinUser._id);
 
   // Get tokens
   const { accessToken, refreshToken } = await generateTokens(loggedinUser._id);
@@ -100,7 +109,11 @@ const login = AsyncHandler(async (req, res) => {
     .cookie("accessToken", accessToken, cookieOptions)
     .cookie("refreshToken", refreshToken, cookieOptions)
     .json(
-      new ApiResponse(200, { user: loggedinUser }, "Logged in successfully")
+      new ApiResponse(
+        200,
+        { user: loggedinUser, merged: mergeResult?.modifiedCount || 0 },
+        "Logged in successfully"
+      )
     );
 });
 
