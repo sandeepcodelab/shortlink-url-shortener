@@ -121,7 +121,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function AppSidebar({ children, menuItems, user }) {
+export default function AppSidebar({ children, menuItems, user, userLogout }) {
   const theme = useTheme();
   const location = useLocation();
 
@@ -285,6 +285,7 @@ export default function AppSidebar({ children, menuItems, user }) {
           {/* LOGOUT */}
           <ListItem disablePadding sx={{ display: "block", my: 1 }}>
             <ListItemButton
+              onClick={() => userLogout()}
               sx={{
                 minHeight: 48,
                 px: 2.5,
