@@ -3,13 +3,11 @@ import LinkIcon from "@mui/icons-material/Link";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 
-export default function Stats({ links = [] }) {
-  const totalLinks = links.length;
-
-  const totalClicks = links.reduce((acc, l) => acc + (l.clicks || 0), 0);
-
+export default function Stats({ links = [], totalLinks = 0, totalClicks = 0 }) {
   const topClicks =
     links.length > 0 ? Math.max(...links.map((l) => l.clicks || 0)) : 0;
+
+  const mostClickedLink = links.find((link) => link.clicks === topClicks);
 
   const cardStyle = {
     // bgcolor: "#1e293b",
@@ -79,9 +77,34 @@ export default function Stats({ links = [] }) {
           <CardContent
             sx={{ display: "grid", alignContent: "space-between", gap: 2 }}
           >
-            <Typography variant="h6">Top Link</Typography>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography variant="h4">{topClicks}</Typography>
+            <Typography variant="h6">Most Clicked Link</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  flexWrap: "wrap",
+                }}
+              >
+                <Typography
+                  variant="p"
+                  sx={{
+                    wordBreak: "break-word",
+                    fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                  }}
+                >
+                  {`${import.meta.env.VITE_BASE_URL}/${mostClickedLink?.shortCode}`}
+                </Typography>
+                <Typography variant="p">
+                  ({mostClickedLink?.clicks} clicks)
+                </Typography>
+              </Box>
               <Box sx={iconWrapper}>
                 <TrendingUpIcon sx={{ fontSize: 20 }} />
               </Box>
