@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,14 +7,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { IconButton } from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CheckIcon from "@mui/icons-material/Check";
 
 export default function LinksTable({
   columns = [],
   rows = [],
   pagination = true,
 }) {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [copiedId, setCopiedId] = useState(null);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -23,6 +27,23 @@ export default function LinksTable({
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  // Copy handler
+  const handleCopy = async (shortCode) => {
+    const shortUrl = `http://localhost:3000/${shortCode}`;
+
+    try {
+      await navigator.clipboard.writeText(shortUrl);
+
+      setCopiedId(shortCode);
+
+      setTimeout(() => {
+        setCopiedId(null);
+      }, 3000);
+    } catch (error) {
+      console.log("Copy failed");
+    }
   };
 
   return (
@@ -116,8 +137,30 @@ export default function LinksTable({
                             borderColor: "#334155",
                           }}
                         >
-                          {column.format ? column.format(value) : value}
-                          {row.code}
+                          {/* {column.format ? column.format(value) : value}
+                          {row.code} */}
+
+                          {column.id === "copy" ? (
+                            <IconButton
+                              onClick={() => handleCopy(row.shortCode)}
+                            >
+                              {copiedId === row.shortCode ? (
+                                <CheckIcon
+                                  fontSize="small"
+                                  sx={{ color: "#fff" }}
+                                />
+                              ) : (
+                                <ContentCopyIcon
+                                  fontSize="small"
+                                  sx={{ color: "#fff" }}
+                                />
+                              )}
+                            </IconButton>
+                          ) : column.format ? (
+                            column.format(value)
+                          ) : (
+                            value
+                          )}
                         </TableCell>
                       );
                     })}
