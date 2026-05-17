@@ -4,17 +4,19 @@ import HomePage from "./pages/Home";
 import DashboardPage from "./pages/Dashboard";
 import DashboardLayout from "./layouts/DashboardLayout";
 import { ToastProvider } from "./context/ToastProvider";
-import Analytics from "./pages/Analytics";
+import Analytics from "./pages/CreateLinks";
 import { AuthProvider } from "./context/AuthContext";
 import { ModalProvider } from "./context/ModalContext";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import MyLinks from "./pages/MyLinks";
+import CreateLinks from "./pages/CreateLinks";
 
 export default function App() {
   return (
     <ModalProvider>
-      <AuthProvider>
-        <ToastProvider>
-          <BrowserRouter>
+      <ToastProvider>
+        <BrowserRouter>
+          <AuthProvider>
             <Routes>
               <Route element={<HomeLayout />}>
                 <Route path="/" element={<HomePage />} />
@@ -28,12 +30,13 @@ export default function App() {
                 }
               >
                 <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/mylinks" element={<Analytics />} />
+                <Route path="/createlinks" element={<CreateLinks />} />
+                <Route path="/mylinks" element={<MyLinks />} />
               </Route>
             </Routes>
-          </BrowserRouter>
-        </ToastProvider>
-      </AuthProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </ToastProvider>
     </ModalProvider>
   );
 }
