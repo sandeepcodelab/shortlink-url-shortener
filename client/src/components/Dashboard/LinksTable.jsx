@@ -102,7 +102,7 @@ export default function LinksTable({
                     hover
                     role="checkbox"
                     tabIndex={-1}
-                    key={row.shortUrl}
+                    key={row.shortCode}
                   >
                     {columns.map((column) => {
                       const value = row[column.id];
