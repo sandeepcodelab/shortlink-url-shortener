@@ -6,8 +6,12 @@ const createShortUrl = (url) => {
   });
 };
 
-const getAllLinks = () => {
-  return api.get("/getAllLinks");
+const getdashboardInfo = () => {
+  return api.get("/dashboard-info");
 };
 
-export { createShortUrl, getAllLinks };
+const getAllLinks = (params = {}) => {
+  return api.get("/getAllLinks", { params });
+};
+
+export { createShortUrl, getdashboardInfo, getAllLinks };
