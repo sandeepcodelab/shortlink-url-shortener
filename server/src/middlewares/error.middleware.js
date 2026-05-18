@@ -18,5 +18,5 @@ export const globleErrorHandler = (err, req, res, next) => {
     ...(process.env.NODE_ENV === "development" ? { stack: error.stack } : {}),
   };
 
-  return res.status(error.statusCode).json({ success: false, response });
+  return res.status(error.statusCode).json({ success: false, ...response });
 };
