@@ -8,7 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useAuth } from "../context/AuthContext";
 
 export default function DashboardLayout() {
-  const { user } = useAuth();
+  const { user, userLogout } = useAuth();
 
   const menuItems = [
     {
@@ -30,7 +30,7 @@ export default function DashboardLayout() {
 
   return (
     <>
-      <AppSidebar menuItems={menuItems} user={user}>
+      <AppSidebar menuItems={menuItems} user={user} userLogout={userLogout}>
         <Outlet />
       </AppSidebar>
     </>
