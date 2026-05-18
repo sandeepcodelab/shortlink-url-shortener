@@ -70,49 +70,55 @@ const getOriginalUrl = AsyncHandler(async (req, res) => {
 
 const getUserAllLinks = AsyncHandler(async (req, res) => {
   const user = req.user;
-  let { topLinks = false, limit = 10, page = 1, sort = "desc" } = req.query;
+  let { search = "", limit = 10, page = 1 } = req.query;
 
   if (!user) throw new ApiError(400, "User id is required");
 
+  search = String(search);
   limit = Number(limit);
   page = Number(page);
 
   const skip = (page - 1) * limit;
 
   // Query
-  const query = Url.find({ "createdBy.user": user._id });
+  const filter = { "createdBy.user": user._id };
 
-  if (topLinks) {
-    query.sort({
-      clicks: -1,
-    });
+  if (search) {
+    filter.$or = [
+      {
+        shortCode: { $regex: search, $options: "i" },
+      },
+      {
+        originalUrl: { $regex: search, $options: "i" },
+      },
+    ];
   }
-  if (sort) {
-    query.sort({
-      createdAt: sort === "desc" ? -1 : 1,
-    });
-  }
 
-  query.skip(skip);
-  query.limit(limit);
-
-  const DocCount = await Url.find({
-    "createdBy.user": user._id,
-  }).countDocuments();
-
-  const userUrls = await query;
+  const userUrls = await Url.find(filter)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
 
   if (!userUrls) throw new ApiError(404, "Link not found");
 
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        { links: userUrls, info: { total: DocCount, page, limit, skip } },
-        "Links fetched successfully"
-      )
-    );
+  const totalRecords = await Url.find(filter).countDocuments();
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        links: userUrls,
+        info: {
+          totalRecords,
+          currentPage: page,
+          limit,
+          skip,
+          totalPages: Math.ceil(totalRecords / limit),
+        },
+      },
+      "Links fetched successfully"
+    )
+  );
 });
 
 const getDashboardInfo = AsyncHandler(async (req, res) => {
