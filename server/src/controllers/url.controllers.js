@@ -169,4 +169,33 @@ const getDashboardInfo = AsyncHandler(async (req, res) => {
   );
 });
 
-export { createShortUrl, getOriginalUrl, getUserAllLinks, getDashboardInfo };
+const deleteLink = AsyncHandler(async (req, res) => {
+  const { recordId = "" } = req.params;
+
+  if (!recordId) throw new ApiError(400, "Rocord Id is missing");
+
+  const deleteRecord = await Url.findByIdAndDelete(recordId);
+
+  if (!deleteRecord) throw new ApiError(404, "Record not found");
+
+  const allLinks = await Url.find().sort({ createdAt: -1 }).limit(10);
+  const totalRecords = await Url.find().countDocuments();
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { links: allLinks, totalRecords },
+        "Record deleted successfully"
+      )
+    );
+});
+
+export {
+  createShortUrl,
+  getOriginalUrl,
+  getUserAllLinks,
+  getDashboardInfo,
+  deleteLink,
+};

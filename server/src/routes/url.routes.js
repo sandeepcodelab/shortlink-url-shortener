@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createShortUrl,
+  deleteLink,
   getDashboardInfo,
   getUserAllLinks,
 } from "../controllers/url.controllers.js";
@@ -10,7 +11,8 @@ const router = Router();
 
 router.route("/shorten").post(authMiddleware, createShortUrl);
 
-router.route("/getAllLinks/").get(verifyJWT, getUserAllLinks);
-router.route("/dashboard-info/").get(verifyJWT, getDashboardInfo);
+router.route("/getAllLinks").get(verifyJWT, getUserAllLinks);
+router.route("/dashboard-info").get(verifyJWT, getDashboardInfo);
+router.route("/delete/:recordId").delete(verifyJWT, deleteLink);
 
 export default router;
