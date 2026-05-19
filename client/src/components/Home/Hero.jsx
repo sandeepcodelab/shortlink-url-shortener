@@ -13,7 +13,8 @@ import {
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useToast } from "../../context/ToastProvider";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
-import { createShortUrl } from "../../services/shorten";
+import { createShortUrl } from "../../services/linkServices";
+import { refreshToken } from "../../services/authService";
 
 export default function Hero() {
   const [url, setUrl] = useState("");
@@ -43,7 +44,7 @@ export default function Hero() {
 
       setCopy(false);
     } catch (err) {
-      notify.error(err?.response?.data?.response?.message);
+      if (err.status !== 401) notify.error(err?.response?.data?.message);
     } finally {
       setLoading(false);
     }
@@ -53,7 +54,10 @@ export default function Hero() {
     navigator.clipboard.writeText(shortUrl);
     setCopy(true);
     notify.success("Copied!");
-    setUrl("");
+
+    setTimeout(() => {
+      setCopy(false);
+    }, 3000);
   };
 
   return (
@@ -182,7 +186,7 @@ export default function Hero() {
           }}
         >
           <Typography
-            sx={{ color: "#38bdf8", fontSize: { xs: "small", sm: "medium" } }}
+            sx={{ color: "#fff", fontSize: { xs: "small", sm: "medium" } }}
           >
             {shortUrl}
           </Typography>
