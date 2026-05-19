@@ -14,4 +14,8 @@ const getAllLinks = (params = {}) => {
   return api.get("/getAllLinks", { params });
 };
 
-export { createShortUrl, getdashboardInfo, getAllLinks };
+const deleteLinkData = (recordId) => {
+  return api.delete(`/delete/${recordId}`);
+};
+
+export { createShortUrl, getdashboardInfo, getAllLinks, deleteLinkData };
