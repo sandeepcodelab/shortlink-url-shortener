@@ -5,28 +5,32 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CheckIcon from "@mui/icons-material/Check";
+import LaunchIcon from "@mui/icons-material/Launch";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Box } from "@mui/material";
 
-export default function LinksTable({ columns = [], rows = [] }) {
+export default function LinksTable({
+  columns = [],
+  rows = [],
+  showDelete = false,
+  handleDelete,
+}) {
   const [copiedId, setCopiedId] = useState(null);
 
   // Copy handler
   const handleCopy = async (shortCode) => {
     const shortUrl = `http://localhost:3000/${shortCode}`;
 
-    try {
-      await navigator.clipboard.writeText(shortUrl);
+    await navigator.clipboard.writeText(shortUrl);
 
-      setCopiedId(shortCode);
+    setCopiedId(shortCode);
 
-      setTimeout(() => {
-        setCopiedId(null);
-      }, 3000);
-    } catch (error) {
-      console.log("Copy failed");
-    }
+    setTimeout(() => {
+      setCopiedId(null);
+    }, 3000);
   };
 
   return (
@@ -107,20 +111,55 @@ export default function LinksTable({ columns = [], rows = [] }) {
                           borderColor: "#334155",
                         }}
                       >
-                        {column.id === "copy" ? (
-                          <IconButton onClick={() => handleCopy(row.shortCode)}>
-                            {copiedId === row.shortCode ? (
-                              <CheckIcon
-                                fontSize="small"
-                                sx={{ color: "#fff" }}
-                              />
-                            ) : (
-                              <ContentCopyIcon
-                                fontSize="small"
-                                sx={{ color: "#fff" }}
-                              />
+                        {column.id === "actions" ? (
+                          <Box sx={{ display: "flex", gap: 1 }}>
+                            {/* COPY */}
+
+                            <Tooltip title="Copy">
+                              <IconButton
+                                onClick={() => handleCopy(row.shortCode)}
+                              >
+                                {copiedId === row.shortCode ? (
+                                  <CheckIcon
+                                    fontSize="small"
+                                    sx={{ color: "#fff" }}
+                                  />
+                                ) : (
+                                  <ContentCopyIcon
+                                    fontSize="small"
+                                    sx={{ color: "#fff" }}
+                                  />
+                                )}
+                              </IconButton>
+                            </Tooltip>
+
+                            {/* VISIT */}
+                            <Tooltip title="Visit">
+                              <IconButton
+                                component="a"
+                                href={`${import.meta.env.VITE_BASE_URL}/${row.shortCode}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <LaunchIcon
+                                  fontSize="small"
+                                  sx={{ color: "#fff" }}
+                                />
+                              </IconButton>
+                            </Tooltip>
+
+                            {/* DELETE */}
+                            {showDelete && (
+                              <Tooltip title="Delete">
+                                <IconButton
+                                  color="error"
+                                  onClick={() => handleDelete(row._id)}
+                                >
+                                  <DeleteIcon fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
                             )}
-                          </IconButton>
+                          </Box>
                         ) : column.format ? (
                           column.format(value)
                         ) : (
