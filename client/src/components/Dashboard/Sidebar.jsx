@@ -405,7 +405,9 @@ export default function AppSidebar({ children, menuItems, user, userLogout }) {
           flexGrow: 1,
           p: 3,
           height: "100%",
+          minHeight: "100vh",
           overflow: "hidden",
+          background: "radial-gradient(circle at top, #27364d, #020617 70%)",
         }}
       >
         <Toolbar />
