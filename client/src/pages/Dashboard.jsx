@@ -5,22 +5,28 @@ import LinksTable from "../components/Dashboard/LinksTable";
 import { useAuth } from "../context/AuthContext";
 import { getAllLinks, getdashboardInfo } from "../services/linkServices";
 import { useToast } from "../context/ToastProvider";
+import Processing from "../components/ProtectedRoute/Processing";
 
 export default function DashboardPage() {
   const { user } = useAuth();
   const { notify } = useToast();
   const [linksData, setLinksData] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!user) return;
 
     const fetchData = async () => {
       try {
+        setLoading(true);
+
         const getlinks = await getdashboardInfo();
 
         setLinksData(getlinks.data.data);
       } catch (err) {
         notify.error(err.response.data.message);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -61,13 +67,17 @@ export default function DashboardPage() {
         }),
     },
     {
-      id: "copy",
-      label: "Copy",
-      minWidth: 100,
-      align: "right",
+      id: "actions",
+      label: "Actions",
+      minWidth: 150,
+      align: "center",
       format: (value) => value,
     },
   ];
+
+  if (loading) {
+    return <Processing />;
+  }
 
   return (
     <>
@@ -79,7 +89,7 @@ export default function DashboardPage() {
           width: "100%",
           height: "100%",
           zIndex: -1,
-          background: "radial-gradient(circle at top, #27364d, #020617 70%)",
+          // background: "radial-gradient(circle at top, #27364d, #020617 70%)",
         }}
       />
       <Box
