@@ -5,7 +5,7 @@ import TablePagination from "@mui/material/TablePagination";
 import { deleteLinkData, getAllLinks } from "../services/linkServices";
 import { useToast } from "../context/ToastProvider";
 import { useSearchParams } from "react-router";
-import { formStyle } from "../components/Forms/Style.js";
+import { formStyle } from "../components/Forms/style";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
