@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import jwt from "jsonwebtoken";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.models.js";
+import { cookieOptions } from "../utils/constant.js";
 
 const verifyJWT = async (req, res, next) => {
   const token = req.cookies?.accessToken;
@@ -55,16 +56,10 @@ const authMiddleware = async (req, res, next) => {
     // Guset auth
     let guest = req.cookies?.guest;
 
-    const options = {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Lax",
-    };
-
     if (!guest) {
       guest = nanoid(20);
 
-      res.cookie("guest", guest, options);
+      res.cookie("guest", guest, cookieOptions);
     }
 
     req.guest = guest;

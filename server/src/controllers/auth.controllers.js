@@ -4,13 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
 import jwt from "jsonwebtoken";
-
-// Cookie options
-const cookieOptions = {
-  HttpOnly: true,
-  Secure: process.env.NODE_ENV === "production",
-  SameSite: "Lax",
-};
+import { cookieOptions } from "../utils/constant.js";
 
 const generateTokens = async (userID) => {
   try {
