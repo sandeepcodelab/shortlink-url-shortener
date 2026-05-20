@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { formStyle } from "./style";
+import { formStyle } from "./formStyle";
 import { useForm, Controller } from "react-hook-form";
 import { registerUser } from "../../services/authService";
 import { useToast } from "../../context/ToastProvider";
