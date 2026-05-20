@@ -1,8 +1,8 @@
 import { Url } from "../models/url.models.js";
 import { nanoid } from "nanoid";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
-import { ApiError } from "../utils/apiError.js";
-import { ApiResponse } from "../utils/apiResponse.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const createShortUrl = AsyncHandler(async (req, res) => {
   const { originalUrl = "" } = req.body;
