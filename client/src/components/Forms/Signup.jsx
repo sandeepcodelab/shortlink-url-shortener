@@ -59,7 +59,7 @@ export default function Signup() {
       notify.success(signupRes.data.message);
       navigate("/dashboard");
     } catch (err) {
-      setApiError(err.response.data.response.message);
+      setApiError(err.response.data.message);
     }
   };
 
