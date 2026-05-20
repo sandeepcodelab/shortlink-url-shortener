@@ -7,7 +7,8 @@ export default function Stats({ links = [], totalLinks = 0, totalClicks = 0 }) {
   const topClicks =
     links.length > 0 ? Math.max(...links.map((l) => l.clicks || 0)) : 0;
 
-  const mostClickedLink = links.find((link) => link.clicks === topClicks);
+  const trendingLink =
+    links.length > 0 ? links.find((link) => link.clicks === topClicks) : {};
 
   const cardStyle = {
     // bgcolor: "#1e293b",
@@ -77,7 +78,7 @@ export default function Stats({ links = [], totalLinks = 0, totalClicks = 0 }) {
           <CardContent
             sx={{ display: "grid", alignContent: "space-between", gap: 2 }}
           >
-            <Typography variant="h6">Most Clicked Link</Typography>
+            <Typography variant="h6">Trending Link</Typography>
             <Box
               sx={{
                 display: "flex",
@@ -99,10 +100,14 @@ export default function Stats({ links = [], totalLinks = 0, totalClicks = 0 }) {
                     fontSize: { xs: "0.75rem", sm: "0.875rem" },
                   }}
                 >
-                  {`${import.meta.env.VITE_BASE_URL}/${mostClickedLink?.shortCode}`}
+                  {!Object.keys(trendingLink).length
+                    ? "No links available yet"
+                    : `${import.meta.env.VITE_BASE_URL}/${trendingLink?.shortCode}`}
                 </Typography>
                 <Typography variant="p">
-                  ({mostClickedLink?.clicks} clicks)
+                  {!Object.keys(trendingLink).length
+                    ? ""
+                    : `${trendingLink?.clicks} clicks`}
                 </Typography>
               </Box>
               <Box sx={iconWrapper}>
